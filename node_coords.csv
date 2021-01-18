@@ -1,14 +1,107 @@
 "","id","label","level","type","size","x","y"
-"Academic Researchers","Academic Researchers","Academic Researchers",NA,NA,3,-0.609137858044724,-0.583887306184815
-"Consultants","Consultants","Consultants",NA,NA,9,0.490700339925733,-1
-"Courts","Courts","Courts",NA,NA,12,-1,0.0978290681969529
-"GCDs","GCDs","GCDs",NA,NA,51,0.0885668787149299,0.35
-"Groundwater Mgmt Area","Groundwater Mgmt Area","Groundwater Mgmt Area",NA,NA,6,0.8,-0.3
-"NGOs","NGOs","NGOs",NA,NA,4.5,0.873002361067052,0.194651580617231
-"Permitted GW Users","Permitted GW Users","Permitted GW Users",NA,NA,4.5,-0.597440972924581,0.507533901280871
-"Regional Water Planning Groups","Regional Water Planning Groups","Regional Water Planning Groups",NA,NA,9,0.938957021886734,-0.692141971816624
-"State Legislature","State Legislature","State Legislature",NA,NA,42,-0.384137253232271,0.0157640078381087
-"TAGD","TAGD","TAGD","Statewide","NGO",3,-0.293227152253349,1
-"TCEQ","TCEQ","TCEQ",NA,NA,37.5,1,0.64642742085687
-"TWCA","TWCA","TWCA",NA,NA,13.5,-0.934212042796818,0.744236890724028
-"TWDB","TWDB","TWDB",NA,NA,67.5,0.218036830486599,-0.339542431139737
+"Academic Researchers","Academic Researchers","Academic Researchers",NA,NA,1,-0.0170377983217744,-0.377968415642096
+"Advisory Groups (WULAC)","Advisory Groups (WULAC)","Advisory Groups (WULAC)",NA,NA,0.5,0.268430531786507,-0.624196293650534
+"Ag Trade Associations","Ag Trade Associations","Ag Trade Associations","Statewide","NGO",4,-0.100208902195035,-0.281024473432475
+"Agriculture","Agriculture","Agriculture",NA,NA,0.5,0.682200922275056,0.425187094490312
+"Bay/Basin Area Stakeholder Committees","Bay/Basin Area Stakeholder Committees","Bay/Basin Area Stakeholder Committees",NA,NA,1,-0.0386089526027931,-0.0666223669432647
+"Bureau Economic Geology","Bureau Economic Geology","Bureau Economic Geology","Statewide","Academic",1,0.00686600136415083,-0.432882898697628
+"Bureau of Reclamation","Bureau of Reclamation","Bureau of Reclamation","","",1.5,0.224633192805772,0.0193506227849269
+"Carbon Offsetter","Carbon Offsetter","Carbon Offsetter","","",0.5,-0.351880613559897,0.32811955895654
+"Chamber Groups","Chamber Groups","Chamber Groups","","",0.5,0.750101648626622,-0.30760733334004
+"Cities < 10K ","Cities < 10K ","Cities < 10K ",NA,NA,7,0.410480686432489,-0.224631509009988
+"Cities > 10K","Cities > 10K","Cities > 10K",NA,NA,7.5,0.371426442855691,-0.190763718559801
+"City or County with PACE Authority","City or County with PACE Authority","City or County with PACE Authority","","",1.5,0.0774560304568477,0.562583311419261
+"Communities Unlimited (National)","Communities Unlimited (National)","Communities Unlimited (National)",NA,NA,0.5,0.871570668515504,-0.636911586995258
+"Communities Unlimited (Texas)","Communities Unlimited (Texas)","Communities Unlimited (Texas)",NA,NA,3,0.587588726657664,-0.406479742536264
+"Consultants","Consultants","Consultants",NA,NA,3,0.417371937878157,0.0371979498010391
+"Contractors","Contractors","Contractors","","",1.5,0.257846999198418,0.203526460739954
+"Counties","Counties","Counties",NA,NA,0.5,0.813489923961958,0.192603359940251
+"Courts","Courts","Courts",NA,NA,4,-0.148064616645844,-0.163455469828821
+"Created wetlands","Created wetlands","Created wetlands","","",1.5,-0.750650936917487,0.627233208749609
+"Customers","Customers","Customers","","",1,0.298914962696538,0.27168043087862
+"Disposal Injection Well","Disposal Injection Well","Disposal Injection Well",NA,NA,0.5,-0.850116937045423,0.320518238150568
+"Disposal Site (stream, sea)","Disposal Site (stream, sea)","Disposal Site (stream, sea)",NA,NA,1,0.235118007523584,-0.727303593176276
+"Dryland Farmers","Dryland Farmers","Dryland Farmers",NA,NA,3.5,-0.282211879139869,-0.245681938722309
+"Edwards Aquifer Authority","Edwards Aquifer Authority","Edwards Aquifer Authority","","",1,0.379111849998488,0.209926889803079
+"Electric Generation ","Electric Generation ","Electric Generation ",NA,NA,0.5,0.551218284697505,0.548381435957494
+"Environment","Environment","Environment","","",0.5,0.39612510317162,1
+"Environmental Groups","Environmental Groups","Environmental Groups",NA,NA,18,-0.0454396000936181,0.11337185903932
+"Federal Entities","Federal Entities","Federal Entities","","",0.5,-0.406521348435155,0.198197110892024
+"Flood Districts","Flood Districts","Flood Districts",NA,NA,0.5,0.780138456404941,0.446673073548241
+"Flood Mapping Division (TWDB)","Flood Mapping Division (TWDB)","Flood Mapping Division (TWDB)",NA,NA,2,0.392001153999283,-0.0608025456024133
+"GCDs","GCDs","GCDs",NA,NA,17,0.080526006852369,-0.169174979939371
+"GLO","GLO","GLO",NA,NA,0.5,0.768335704772642,0.27365959109801
+"Groundwater Irrigators","Groundwater Irrigators","Groundwater Irrigators",NA,NA,3.5,-0.173954029826501,-0.217712190884667
+"Groundwater Mgmt Area","Groundwater Mgmt Area","Groundwater Mgmt Area",NA,NA,2,0.266826150814109,-0.0573300634702474
+"Hunting & Angling Groups","Hunting & Angling Groups","Hunting & Angling Groups",NA,NA,1,-0.287138734530626,0.139104035499785
+"Industries","Industries","Industries",NA,NA,0.5,0.644397157845996,0.556069983785668
+"Investor Owned Utilities","Investor Owned Utilities","Investor Owned Utilities",NA,NA,6,0.378044558042962,-0.317029947401176
+"Irrigation Districts","Irrigation Districts","Irrigation Districts",NA,NA,1.5,0.165074230023859,-0.421293052147949
+"Irrigators","Irrigators","Irrigators","","",4.5,0.235277778518105,0.313417013991949
+"Landowner w/ GW (in GCD)","Landowner w/ GW (in GCD)","Landowner w/ GW (in GCD)","Local","Public",1,-0.0670861198695047,-0.544673440180427
+"Landowner w/GW (no GCD)","Landowner w/GW (no GCD)","Landowner w/GW (no GCD)",NA,NA,0.5,-0.139085321692127,-0.96785540049134
+"Landowners/Farmers/Rangers ","Landowners/Farmers/Rangers ","Landowners/Farmers/Rangers ",NA,NA,1,-0.267333566662334,0.208739282768764
+"Lender","Lender","Lender","","",1,-0.0235733495134078,0.863511488697432
+"Livestock Producers","Livestock Producers","Livestock Producers",NA,NA,3.5,-0.2755471563322,-0.286313211595209
+"Municipal Utilities","Municipal Utilities","Municipal Utilities",NA,NA,1,-0.538026005911233,-0.370726598936596
+"Municipalities","Municipalities","Municipalities",NA,NA,0.5,0.734499855401152,0.355904851269323
+"National Rural Water Association","National Rural Water Association","National Rural Water Association",NA,NA,1,0.542371268811989,-0.698440533315573
+"Net Zero Funds","Net Zero Funds","Net Zero Funds","","",1,0.206998971076966,0.40173897774881
+"NGOs","NGOs","NGOs",NA,NA,1.5,0.13743512519575,-0.347570050215249
+"NRSC","NRSC","NRSC","","",1,0.174240622246965,0.55039817238351
+"OG E&P Operator","OG E&P Operator","OG E&P Operator",NA,NA,4,0.013320425602156,-0.644413086821254
+"OG Refinery","OG Refinery","OG Refinery",NA,NA,2,0.219630711747539,-0.981634755539499
+"OG Trade Associations","OG Trade Associations","OG Trade Associations",NA,NA,1,0.0743028116189202,-0.436452156143022
+"Oil and Gas","Oil and Gas","Oil and Gas",NA,NA,2,-0.327014063602294,-0.0996782485776887
+"Onsite Water Project Developers","Onsite Water Project Developers","Onsite Water Project Developers","","",1.5,-0.0201360636715132,0.677048227619813
+"Orphaned Well Remediation (companys, service provider)","Orphaned Well Remediation (companys, service provider)","Orphaned Well Remediation (companys, service provider)","","",1.5,-0.497890530253994,0.443839685184758
+"Pecos River","Pecos River","Pecos River","","",0.5,-1,0.80236273292232
+"Permitted GW Users","Permitted GW Users","Permitted GW Users",NA,NA,1.5,-0.160537507739562,-0.302663531216678
+"Political Subdivisions","Political Subdivisions","Political Subdivisions",NA,NA,0.5,-0.131792117972202,-0.0498538500634237
+"Private banks/CoBank","Private banks/CoBank","Private banks/CoBank",NA,NA,1,0.56211902041274,-0.559722972248873
+"Private Companies","Private Companies","Private Companies","","",1,-0.0458839609074173,0.528432303398123
+"Public","Public","Public",NA,NA,2,0.0678901025585583,0.41016106618963
+"Railroad Commission","Railroad Commission","Railroad Commission",NA,NA,1,-0.530119274013612,0.239503314817339
+"Rate Advisory Committee","Rate Advisory Committee","Rate Advisory Committee","","",1.5,0.636803505552458,-0.0544020478887499
+"Rate Payers","Rate Payers","Rate Payers","","",0.5,1,-0.108085739121001
+"Red Bluff Reservoir","Red Bluff Reservoir","Red Bluff Reservoir","","",1.5,0.321003908499359,0.662072410177526
+"Regional Flood Planning Groups","Regional Flood Planning Groups","Regional Flood Planning Groups",NA,NA,11,0.457215572812502,0.20352924640752
+"Regional Water Planning Groups","Regional Water Planning Groups","Regional Water Planning Groups",NA,NA,3,0.122336109651059,0.000143211396817389
+"River Authorities","River Authorities","River Authorities",NA,NA,4.5,0.154511047123044,-0.0586395027394234
+"Small businesses","Small businesses","Small businesses",NA,NA,0.5,0.821426166424877,0.372871850784038
+"Social Media","Social Media","Social Media",NA,NA,1,-0.178067284198411,0.414032688456872
+"Soil and Water Conservation Bd","Soil and Water Conservation Bd","Soil and Water Conservation Bd",NA,NA,0.5,0.61312499630997,0.481532890872701
+"Spring Flows","Spring Flows","Spring Flows","","",0.5,0.991362586357069,0.125219970577223
+"State Legislature","State Legislature","State Legislature",NA,NA,14,-0.0101108368324528,-0.241540121085499
+"Statewide Elected Officials","Statewide Elected Officials","Statewide Elected Officials",NA,NA,2,0.0109858335250923,0.0435954681463775
+"Surface Water Irrigators","Surface Water Irrigators","Surface Water Irrigators",NA,NA,3.5,0.0502097994855604,-0.266183730686705
+"Surface Water Rights Holder","Surface Water Rights Holder","Surface Water Rights Holder",NA,NA,1.5,0.148949061309913,-0.715440180376821
+"TAGD","TAGD","TAGD","Statewide","NGO",1,-0.16235404782276,-0.375449049124974
+"TCEQ","TCEQ","TCEQ",NA,NA,12.5,0.189617306824879,-0.262176830700103
+"TDEM","TDEM","TDEM",NA,NA,0.5,0.719382962611599,0.506455009345298
+"Texas Attorney General","Texas Attorney General","Texas Attorney General",NA,NA,2.5,0.52510124484546,-0.358769132311006
+"Texas Dept Agriculture","Texas Dept Agriculture","Texas Dept Agriculture",NA,NA,0.5,0.846226709492536,0.28563047840139
+"Texas Legislature","Texas Legislature","Texas Legislature","","",1,0.356596172447876,0.295300008252677
+"Texas Parks and Wildlife","Texas Parks and Wildlife","Texas Parks and Wildlife","Statewide","Agency",3,0.140864539151116,0.364618875528552
+"Texas PUC","Texas PUC","Texas PUC",NA,NA,3.5,0.31417380571302,-0.3544206371245
+"Texas Rural Water Association","Texas Rural Water Association","Texas Rural Water Association",NA,NA,4,0.35208309115911,-0.417709138266279
+"Texas Water Trade","Texas Water Trade","Texas Water Trade","","",5.5,0.065743966010835,0.292033656131414
+"The Aquifer","The Aquifer","The Aquifer","","",1.5,0.616386338554931,0.100628472439497
+"Third-Party Recycler","Third-Party Recycler","Third-Party Recycler",NA,NA,0.5,-0.0446410649324507,-1
+"Trade Associations","Trade Associations","Trade Associations",NA,NA,2.5,0.556783982274426,-0.262022815758427
+"Traditional Media","Traditional Media","Traditional Media",NA,NA,1.5,-0.111183237195717,0.318197268805059
+"TWCA","TWCA","TWCA",NA,NA,4.5,-0.037423155521519,-0.162999719612525
+"TWDB","TWDB","TWDB",NA,NA,22.5,0.192208582137663,-0.148133560964013
+"TWICC","TWICC","TWICC",NA,NA,2.5,0.548728442297243,-0.31258102733283
+"TWUA","TWUA","TWUA",NA,NA,0.5,-0.328013984523182,-0.482954373481572
+"TX AWWA","TX AWWA","TX AWWA",NA,NA,0.5,-0.252613982699056,-0.555406994720993
+"US Army Corps of Engineers","US Army Corps of Engineers","US Army Corps of Engineers",NA,NA,1,-0.121497068217622,0.436160927313158
+"US EPA","US EPA","US EPA","Federal","Agency",1,0.472475979261536,-0.278911018390918
+"US FWS","US FWS","US FWS","","",0.5,0.139741112335215,0.739095834939886
+"USDA - RD","USDA - RD","USDA - RD",NA,NA,2,0.507511098220636,-0.494859961776618
+"Water Districts","Water Districts","Water Districts",NA,NA,6.5,0.388921329479238,-0.243199641687583
+"Water Marketers","Water Marketers","Water Marketers",NA,NA,1.5,-0.452845923463929,-0.312311286021755
+"Water Researchers/Scientists","Water Researchers/Scientists","Water Researchers/Scientists",NA,NA,1,-0.224815856456496,0.263831631237945
+"Water Supply Corporations","Water Supply Corporations","Water Supply Corporations",NA,NA,6.5,0.385627215320971,-0.34885247665365
+"Water Utilities","Water Utilities","Water Utilities",NA,NA,14,0.214689289117992,0.0780162660818533
+"Wholesale Water Providers","Wholesale Water Providers","Wholesale Water Providers",NA,NA,2.5,0.480469061731055,-0.395737485958602

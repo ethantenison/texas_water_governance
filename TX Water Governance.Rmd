@@ -127,7 +127,7 @@ System Map Graphs
 
 #All relationships
 ```{r echo=FALSE}
-nodes<- read_csv("node_coords2.csv")
+nodes<- read_csv("node_coords.csv")
 nodes <- select(nodes, -c(X1))
 nodes <- select(nodes, id, x, y)
 row.names(nodes) <- nodes[['id']]
@@ -209,7 +209,7 @@ V(g1_agriculture)$size<-V(g1_agriculture)$size/4
 
 gvis_agriculture<-toVisNetworkData(g1_agriculture)
 nodelist_agriclulture<-gvis_agriculture$nodes
-viz_ag <- visNetwork(sort(gvis_agriculture$nodes),gvis_agriculture$edges, main="Agriculture Subset",width = "100%",height = "850px") %>%
+viz_ag <- visNetwork(sort(gvis_agriculture$nodes),gvis_agriculture$edges, main="Agriculture",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
