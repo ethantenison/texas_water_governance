@@ -318,17 +318,43 @@ V(g1_agriculture)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 
 V(g1_agriculture)$size<-V(g1_agriculture)$size/4
 
-# E(g1_agriculture)[E(g1_agriculture)$type=="Advocacy/Policy Preference"]$color <-"brown"
-# E(g1_agriculture)[E(g1_agriculture)$type==" Water sales"]$color <-"green"
-# E(g1_agriculture)[E(g1_agriculture)$type=="Water rights/regulation of"]$color <-"darkred"
-# E(g1_agriculture)[E(g1_agriculture)$type=="Lobbying"]$color <-"orange"
-# E(g1_agriculture)[E(g1_agriculture)$type=="Membership"]$color <-"red"
-# E(g1_agriculture)[E(g1_agriculture)$type=="Permits/Authorization"]$color <-"blue"
 
 
 gvis_agriculture<-toVisNetworkData(g1_agriculture)
+
+lnodes <-
+  data.frame(
+    label = c(
+      "Academic",
+      "Public",
+      "Private",
+      "Physical Feature",
+      "Government",
+      "NGO",
+      "Utilities"
+    ),
+    color.background = c(colors[1],colors[2],colors[3],colors[4],colors[5],colors[6],colors[8]),
+    color.border = c("black", "black", "black", "black", "black", "black", "black")
+  )
+
+
+
+nodes2 <- sort(gvis_agriculture$nodes)
+
+nodes2$color <- ""
+nodes2$color[nodes2$type == "Academic"] <- colors[1]
+nodes2$color[nodes2$type == "Public"] <- colors[2]
+nodes2$color[nodes2$type == "Private"] <- colors[3]
+nodes2$color[nodes2$type == "Physical Feature"] <- colors[4]
+nodes2$color[nodes2$type == "Government"] <- colors[5]
+nodes2$color[nodes2$type == "NGO"] <- colors[6]
+nodes2$color[nodes2$type == "Utilities"] <- colors[8]
+
+edges <- gvis_agriculture$edges
+edges$color <- "808080"
+
 nodelist_agriclulture<-gvis_agriculture$nodes
-viz_ag <- visNetwork(sort(gvis_agriculture$nodes),gvis_agriculture$edges, main="Agriculture",width = "100%",height = "850px") %>%
+viz_ag <- visNetwork(nodes2,edges, main="Agriculture",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
@@ -342,7 +368,7 @@ viz_ag <- visNetwork(sort(gvis_agriculture$nodes),gvis_agriculture$edges, main="
              highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE)%>%
   addFontAwesome() %>%
-  visLegend(position = "left", useGroups = FALSE,stepY=100)
+  visLegend(position = "left", addNodes = lnodes, useGroups = FALSE,stepY=100)
 
 viz_ag$x$nodes <- viz_ag$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c('x.x', 'y.x')) %>% rename(x = x.y, y=y.y)
 
@@ -365,8 +391,40 @@ V(g1_groundwater)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 V(g1_groundwater)$size<-V(g1_groundwater)$size/4
 
 gvis_groundwater<-toVisNetworkData(g1_groundwater)
+
+lnodes <-
+  data.frame(
+    label = c(
+      "Academic",
+      "Public",
+      "Private",
+      "Physical Feature",
+      "Government",
+      "NGO",
+      "Utilities"
+    ),
+    color.background = c(colors[1],colors[2],colors[3],colors[4],colors[5],colors[6],colors[8]),
+    color.border = c("black", "black", "black", "black", "black", "black", "black")
+  )
+
+
+
+nodes2 <- sort(gvis_groundwater$nodes)
+
+nodes2$color <- ""
+nodes2$color[nodes2$type == "Academic"] <- colors[1]
+nodes2$color[nodes2$type == "Public"] <- colors[2]
+nodes2$color[nodes2$type == "Private"] <- colors[3]
+nodes2$color[nodes2$type == "Physical Feature"] <- colors[4]
+nodes2$color[nodes2$type == "Government"] <- colors[5]
+nodes2$color[nodes2$type == "NGO"] <- colors[6]
+nodes2$color[nodes2$type == "Utilities"] <- colors[8]
+
+edges <- gvis_groundwater$edges
+edges$color <- "808080"
+
 nodelist_agriclulture<-gvis_groundwater$nodes
-viz_groundwater <- visNetwork(sort(gvis_groundwater$nodes),gvis_groundwater$edges, main="Groundwater",width = "100%",height = "850px") %>%
+viz_groundwater <- visNetwork(nodes2,edges, main="Groundwater",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
@@ -380,7 +438,7 @@ viz_groundwater <- visNetwork(sort(gvis_groundwater$nodes),gvis_groundwater$edge
              highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE)%>%
   addFontAwesome() %>%
-  visLegend(position = "left", useGroups = FALSE,stepY=100)
+  visLegend(position = "left", addNodes = lnodes,useGroups = FALSE,stepY=100)
 
 viz_groundwater$x$nodes <- viz_groundwater$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c('x.x', 'y.x')) %>% rename(x = x.y, y=y.y)
 
@@ -401,8 +459,42 @@ V(g1_environment)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 V(g1_environment)$size<-V(g1_environment)$size/3
 
 gvis_environment<-toVisNetworkData(g1_environment)
+
+
+lnodes <-
+  data.frame(
+    label = c(
+      "Academic",
+      "Public",
+      "Private",
+      "Physical Feature",
+      "Government",
+      "NGO",
+      "Utilities"
+    ),
+    color.background = c(colors[1],colors[2],colors[3],colors[4],colors[5],colors[6],colors[8]),
+    color.border = c("black", "black", "black", "black", "black", "black", "black")
+  )
+
+
+
+nodes2 <- sort(gvis_environment$nodes)
+
+nodes2$color <- ""
+nodes2$color[nodes2$type == "Academic"] <- colors[1]
+nodes2$color[nodes2$type == "Public"] <- colors[2]
+nodes2$color[nodes2$type == "Private"] <- colors[3]
+nodes2$color[nodes2$type == "Physical Feature"] <- colors[4]
+nodes2$color[nodes2$type == "Government"] <- colors[5]
+nodes2$color[nodes2$type == "NGO"] <- colors[6]
+nodes2$color[nodes2$type == "Utilities"] <- colors[8]
+
+edges <- gvis_environment$edges
+edges$color <- "808080"
+
+
 nodelist_agriclulture<-gvis_environment$nodes
-viz_environment <- visNetwork(sort(gvis_environment$nodes),gvis_environment$edges, main="Environment",width = "100%",height = "850px") %>%
+viz_environment <- visNetwork(nodes2,edges, main="Environment",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
@@ -416,7 +508,7 @@ viz_environment <- visNetwork(sort(gvis_environment$nodes),gvis_environment$edge
              highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE)%>%
   addFontAwesome() %>%
-  visLegend(position = "left", useGroups = FALSE,stepY=100)
+  visLegend(position = "left",addNodes = lnodes, useGroups = FALSE,stepY=100)
 
 viz_environment$x$nodes <- viz_environment$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c('x.x', 'y.x')) %>% rename(x = x.y, y=y.y)
 
@@ -438,8 +530,42 @@ V(g1_flooding)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name
 V(g1_flooding)$size<-V(g1_flooding)$size/2.5
 
 gvis_flooding<-toVisNetworkData(g1_flooding)
+
+
+lnodes <-
+  data.frame(
+    label = c(
+      "Academic",
+      "Public",
+      "Private",
+      "Physical Feature",
+      "Government",
+      "NGO",
+      "Utilities"
+    ),
+    color.background = c(colors[1],colors[2],colors[3],colors[4],colors[5],colors[6],colors[8]),
+    color.border = c("black", "black", "black", "black", "black", "black", "black")
+  )
+
+
+
+nodes2 <- sort(gvis_flooding$nodes)
+
+nodes2$color <- ""
+nodes2$color[nodes2$type == "Academic"] <- colors[1]
+nodes2$color[nodes2$type == "Public"] <- colors[2]
+nodes2$color[nodes2$type == "Private"] <- colors[3]
+nodes2$color[nodes2$type == "Physical Feature"] <- colors[4]
+nodes2$color[nodes2$type == "Government"] <- colors[5]
+nodes2$color[nodes2$type == "NGO"] <- colors[6]
+nodes2$color[nodes2$type == "Utilities"] <- colors[8]
+
+edges <- gvis_flooding$edges
+edges$color <- "808080"
+
+
 nodelist_agriclulture<-gvis_flooding$nodes
-viz_flooding <- visNetwork(sort(gvis_flooding$nodes),gvis_flooding$edges, main="Flooding",width = "100%",height = "850px") %>%
+viz_flooding <- visNetwork(nodes2,edges, main="Flooding",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
@@ -453,14 +579,14 @@ viz_flooding <- visNetwork(sort(gvis_flooding$nodes),gvis_flooding$edges, main="
              highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE)%>%
   addFontAwesome() %>%
-  visLegend(position = "left", useGroups = FALSE,stepY=100)
+  visLegend(position = "left",addNodes = lnodes, useGroups = FALSE,stepY=100)
 
 viz_flooding$x$nodes <- viz_flooding$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c('x.x', 'y.x')) %>% rename(x = x.y, y=y.y)
 
 viz_flooding
 ```
 
-#Network with only oilandgas ties
+#Network with only oil and gas ties
 ```{r echo=FALSE}
 
 #Define Attributes
@@ -477,8 +603,42 @@ V(g1_oilandgas)$size<-V(g1_oilandgas)$size/2.5
 V(g1_oilandgas)$size<-V(g1_oilandgas)$size + 1
 
 gvis_oilandgas<-toVisNetworkData(g1_oilandgas)
+
+lnodes <-
+  data.frame(
+    label = c(
+      "Academic",
+      "Public",
+      "Private",
+      "Physical Feature",
+      "Government",
+      "NGO",
+      "Utilities"
+    ),
+    color.background = c(colors[1],colors[2],colors[3],colors[4],colors[5],colors[6],colors[8]),
+    color.border = c("black", "black", "black", "black", "black", "black", "black")
+  )
+
+
+
+nodes2 <- sort(gvis_oilandgas$nodes)
+
+nodes2$color <- ""
+nodes2$color[nodes2$type == "Academic"] <- colors[1]
+nodes2$color[nodes2$type == "Public"] <- colors[2]
+nodes2$color[nodes2$type == "Private"] <- colors[3]
+nodes2$color[nodes2$type == "Physical Feature"] <- colors[4]
+nodes2$color[nodes2$type == "Government"] <- colors[5]
+nodes2$color[nodes2$type == "NGO"] <- colors[6]
+nodes2$color[nodes2$type == "Utilities"] <- colors[8]
+
+edges <- gvis_oilandgas$edges
+edges$color <- "808080"
+
+
+
 nodelist_agriclulture<-gvis_oilandgas$nodes
-viz_oil <- visNetwork(sort(gvis_oilandgas$nodes),gvis_oilandgas$edges, main="Oil and Gas",width = "100%",height = "850px") %>%
+viz_oil <- visNetwork(nodes2,edges, main="Oil and Gas",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
@@ -492,7 +652,7 @@ viz_oil <- visNetwork(sort(gvis_oilandgas$nodes),gvis_oilandgas$edges, main="Oil
              highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE)%>%
   addFontAwesome() %>%
-  visLegend(position = "left", useGroups = FALSE,stepY=100)
+  visLegend(position = "left",addNodes = lnodes, useGroups = FALSE,stepY=100)
 
 viz_oil$x$nodes <- viz_oil$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c('x.x', 'y.x')) %>% rename(x = x.y, y=y.y)
 
@@ -514,8 +674,40 @@ V(g1_rural)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V
 V(g1_rural)$size<-V(g1_rural)$size/3
 
 gvis_rural<-toVisNetworkData(g1_rural)
+
+lnodes <-
+  data.frame(
+    label = c(
+      "Academic",
+      "Public",
+      "Private",
+      "Physical Feature",
+      "Government",
+      "NGO",
+      "Utilities"
+    ),
+    color.background = c(colors[1],colors[2],colors[3],colors[4],colors[5],colors[6],colors[8]),
+    color.border = c("black", "black", "black", "black", "black", "black", "black")
+  )
+
+
+
+nodes2 <- sort(gvis_rural$nodes)
+
+nodes2$color <- ""
+nodes2$color[nodes2$type == "Academic"] <- colors[1]
+nodes2$color[nodes2$type == "Public"] <- colors[2]
+nodes2$color[nodes2$type == "Private"] <- colors[3]
+nodes2$color[nodes2$type == "Physical Feature"] <- colors[4]
+nodes2$color[nodes2$type == "Government"] <- colors[5]
+nodes2$color[nodes2$type == "NGO"] <- colors[6]
+nodes2$color[nodes2$type == "Utilities"] <- colors[8]
+
+edges <- gvis_rural$edges
+edges$color <- "808080"
+
 nodelist_agriclulture<-gvis_rural$nodes
-viz_rural <- visNetwork(sort(gvis_rural$nodes),gvis_rural$edges, main="Rural",width = "100%",height = "850px") %>%
+viz_rural <- visNetwork(nodes2,edges, main="Rural",width = "100%",height = "850px") %>%
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .1)),
@@ -529,7 +721,7 @@ viz_rural <- visNetwork(sort(gvis_rural$nodes),gvis_rural$edges, main="Rural",wi
              highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE)%>%
   addFontAwesome() %>%
-  visLegend(position = "left", useGroups = FALSE,stepY=100)
+  visLegend(position = "left",addNodes = lnodes, useGroups = FALSE,stepY=100)
 
 viz_rural$x$nodes <- viz_rural$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c('x.x', 'y.x')) %>% rename(x = x.y, y=y.y)
 
