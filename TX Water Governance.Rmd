@@ -7,6 +7,10 @@ output: html_document
 
 ```{r include=FALSE}
 source("utils1.R")
+
+
+colors <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+          "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#b19cd9")
 ```
 
 ```{r Clean Network Data, include=FALSE}
@@ -165,31 +169,53 @@ E(g1)[E(g1)$sector=="Rural Utilities"]$color <-"blue"
 E(g1)[E(g1)$sector=="Innovation"]$color <-"gray"
 E(g1)[E(g1)$sector=="Municipal"]$color <-"darkgreen"
 
-ledges<-data.frame(label=c("Agriculture","Environment","Flooding","Groundwater","Oil and Gas", "Rural", "Innovation", "Municipal"), arrows=c("to"), 
-color = c("brown", "green", "darkred","orange", "red", "blue", "gray", "darkgreen"))
+ledges <-
+  data.frame(
+    label = c(
+      "Agriculture",
+      "Environment",
+      "Flooding",
+      "Groundwater",
+      "Oil and Gas",
+      "Rural",
+      "Innovation",
+      "Municipal"
+    ),
+    arrows = c("to"),
+    color = c(
+      "brown",
+      "green",
+      "darkred",
+      "orange",
+      "red",
+      "blue",
+      "gray",
+      "darkgreen"
+    )
+  )
 
 
-V(g1)[which(V(g1)$type=="Government")]$color<-"red"
-V(g1)[which(V(g1)$type=="NGO")]$color<-"blue"
-V(g1)[which(V(g1)$type=="Private")]$color<-"brown"
-V(g1)[which(V(g1)$type=="Utilities")]$color<-"orange"
-V(g1)[which(V(g1)$type=="Physical Feature")]$color<-"mediumseagreen"
-V(g1)[which(V(g1)$type=="Academic")]$color<-"gray"
-V(g1)[which(V(g1)$type=="Public")]$color<-"Yellow"
+V(g1)[which(V(g1)$type=="Government")]$shape<-"square"
+V(g1)[which(V(g1)$type=="NGO")]$shape<-"triangle"
+V(g1)[which(V(g1)$type=="Private")]$shape<-"diamond"
+V(g1)[which(V(g1)$type=="Utilities")]$shape<-"star"
+V(g1)[which(V(g1)$type=="Physical Feature")]$shape<-"box"
+V(g1)[which(V(g1)$type=="Academic")]$shape<-"circle"
+V(g1)[which(V(g1)$type=="Public")]$shape<-"ellipse"
 
 
-V(g1)[which(V(g1)$level=="Local")]$shape<-"dot"
-V(g1)[which(V(g1)$level=="Regional")]$shape<-"triangle"
-V(g1)[which(V(g1)$level=="Statewide")]$shape<-"square"
-V(g1)[which(V(g1)$level=="Nationwide")]$shape<-"diamond"
+# V(g1)[which(V(g1)$level=="Local")]$shape<-"dot"
+# V(g1)[which(V(g1)$level=="Regional")]$shape<-"triangle"
+# V(g1)[which(V(g1)$level=="Statewide")]$shape<-"square"
+# V(g1)[which(V(g1)$level=="Nationwide")]$shape<-"diamond"
 
 V(g1)$size<-V(g1)$size*1.5
 
 
-lnodes <- data.frame(label = c("Government", "NGO", "Private", "Utilities", "Public", "Academic", "Physical Feature", "Local", "Regional", "Statewide", "Nationwide"),  
-color.background = c("red", "blue","brown", "orange", "gray", "yellow", "mediumseagreen","white", "white", "white", "white"),
-color.border = c("black","black","black","black","black","black", "black","black","black", "black", "black"),
-shape=c("square","square","square","square","square", "square", "square", "dot", "triangle", "square", "diamond"))
+lnodes <- data.frame(label = c("Government", "NGO", "Private", "Utilities", "Public", "Academic", "Physical Feature"),  
+color.background = c("white", "white","white", "white", "white", "white", "white"),
+color.border = c("black","black","black","black","black","black", "black"),
+shape=c("square","triangle","diamond","star","ellipse", "circle", "box"))
 
 gvis<-toVisNetworkData(g1)
 nodelist<-gvis$nodes
@@ -197,7 +223,7 @@ viz_all<-visNetwork(sort(gvis$nodes),gvis$edges,main="Policy and Governance Acro
   visLayout(randomSeed = 123) %>%
   visEdges(smooth =T,
            arrows =list(to = list(enabled = TRUE, scaleFactor = .5)),
-           color = list(color = E(g1)$color, highlight = "black"))  %>% #https://datastorm-open.github.io/visNetwork/edges.html
+           color = list(highlight = "black")) %>% #https://datastorm-open.github.io/visNetwork/edges.html
   visPhysics(stabilization = FALSE)  %>%
   visIgraphLayout(smooth=FALSE,physics=FALSE, layout="layout_with_fr") %>%
   visLayout(randomSeed=123,improvedLayout = TRUE)%>%
