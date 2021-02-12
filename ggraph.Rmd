@@ -32,17 +32,17 @@ e1[,5]=as.character(e1[,5])
 #Edge Colors
 edge_colors <- 
   c(
-      "#eb7df4",# "Advocacy/Policy Preference",
-      "#f6eb14",#   "Information",
-      "#ec008c",#   "Authority to set rules",
-      "#00b294",#   "Contract",
-      "#ec008c",#   "Cooperation/coordination",
+      "#fb7e81",# "Advocacy/Policy Preference",
+      "#ffa807",#   "Information",
+      "red",#   "Authority to set rules",
+      "black",#   "Contract",
+      "#eb7df4",#   "Cooperation/coordination",
       "#97c2fc",#   "Water",                      
-      "#ec008c",#   "Regulation/Oversight",
+      "#006200",#   "Regulation/Oversight",
       "#7be141",#   "Money",
-      "#ad85e4",#   "Lobbying",
-      "#eb7df4", #   "Membership",
-      "#00b294",#   "Water sales,
+      "#0000CD",#   "Lobbying",
+      "#ad85e4", #   "Membership",
+      "#049E8E",#   "Water sales,
       "gray"
   )
 
@@ -73,13 +73,23 @@ node_colors <- c("#fb7e81",
 
 
 names(node_colors) <- c(
+  "Public",
   "Government",
-  "NGO",
-  "Private",
   "Utilities",
-  "Physical Feature",
   "Academic",
-  "Public"
+  "NGO",
+  "Physical Feature",
+  "Private"
+)
+
+node_color_order <- c(
+  "Public",
+  "Government",
+  "Utilities",
+  "Academic",
+  "NGO",
+  "Physical Feature",
+  "Private"
 )
 
 
@@ -177,6 +187,24 @@ names(edge_colors) <- c(
     "Water sales",
     "Other"
 )
+
+
+edge_color_order = c(
+  "Information",
+  "Advocacy/Policy Preference",
+  "Authority to set rules",
+  "Cooperation/coordination",
+  "Membership",
+  "Lobbying",
+  "Water",
+  "Water sales",
+  "Regulation/Oversight",
+  "Money",
+  "Contract",
+  "Other"
+)
+
+
 ```
 
 $~$
@@ -200,13 +228,13 @@ colnames(DF_Centrality)[1]<-"name"
 colnames(DF_Centrality)[4]<-"TotalDegree"
 
 
-par(mfcol = c(4,3)) 
-hist(inDegree)
-hist(outDegree)
-hist(TotalDegree)
-hist(betweenness)
-hist(inCloseness)
-hist(outCloseness)
+# par(mfcol = c(4,3)) 
+# hist(inDegree)
+# hist(outDegree)
+# hist(TotalDegree)
+# hist(betweenness)
+# hist(inCloseness)
+# hist(outCloseness)
 
 dd.g1<-degree.distribution(g1)
 d<-1:max(TotalDegree)-1
@@ -222,7 +250,7 @@ input_attributes<-txwater_centrality
 ```
 
 
-# Full Network 
+## Full Network (Node Focused)
 
 ```{r ggplot, message=FALSE, warning=FALSE}
 library(extrafont)
@@ -231,16 +259,27 @@ loadfonts()
 set.seed(27)
 
 nodes <- sort(gvis_ext$nodes)
-nodes$size <- nodes$size*10
+nodes$size <- nodes$size*5
 edges <- gvis_ext$edges
+
+
+
+
+
+
+for (i in 1:length(edges$type)){
+  if (any(names(edge_colors) %in% edges$type[i]) == FALSE){
+    edges$type[i] <- "Other"
+  }
+}
 
 
 graph <- graph_from_data_frame(vertices = nodes, d = edges, directed = TRUE)
 
 
-g <- ggraph(graph, layout = 'fr') +
+g <- ggraph(graph, layout = 'stress') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6
   ) +
@@ -248,16 +287,17 @@ g <- ggraph(graph, layout = 'fr') +
   geom_node_text(
      aes(
        x = x,
-       y = y - .4,
+       y = y - .2,
+       size = 500,
        label = ifelse(
-         size > 400, 
+         size > 100, 
          label, 
          ""))
      ) +
-  scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(values = node_colors) +
+  scale_color_manual(name = "Type of Organization", values = node_colors, breaks = node_color_order) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Policy and Governance across Texas Water Sector') +
   theme(
     text = element_text('Helvetica', size = 20),
@@ -276,14 +316,72 @@ g <- ggraph(graph, layout = 'fr') +
 g
 
 ggsave(
-  'media/all_network.png',
+  'media/all_network_node_focused.png',
   width = 16,
   height = 12,
   dpi = 500
 )
 
 ```
+## Full network (Edge Focused)
+```{r fullnetwork_edges, message=FALSE, warning=FALSE}
+set.seed(27)
 
+
+g <- ggraph(graph, layout = 'stress') +
+  geom_edge_link(aes(edge_color = type),
+                 edge_width = 1,
+                 edge_alpha = 0.7) +
+  geom_node_point(aes(
+    size = size * 5,
+    color = "black",
+    shape = level,
+    alpha = 0.5
+  )) +
+  geom_node_text(aes(
+    x = x,
+    y = y - .2,
+    size = 500,
+    label = ifelse(size > 100,
+                   label,
+                   "")
+  )) +
+  scale_color_manual(values = "black") +
+  scale_shape_discrete(name = "Area of Operation") +
+  scale_edge_color_manual(name = "Connection Type", values = edge_colors, breaks = edge_color_order) +
+  scale_size_area(max_size = 10) +
+  scale_shape_manual(values=c(18,16,17,15))+
+  theme_graph(title_size = 34) +
+  labs(title = 'Policy and Governance across Texas Water Sector') +
+  theme(
+    text = element_text('Helvetica', size = 20),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = "none",
+    edge_color = guide_legend(override.aes = list(size = 5)),
+    shape = guide_legend(override.aes = list(size = 5), title = "Area of Operation"),
+    alpha = "none"
+  )
+
+
+g
+
+ggsave(
+  'media/all_network_edge_focused.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
 
 ## Agriculture
 
@@ -322,7 +420,7 @@ g <- ggraph(g1_agriculture, layout = 'fr') +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Agriculture') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -394,7 +492,7 @@ g <- ggraph(g1_environment, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(18,16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Environment') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -459,7 +557,7 @@ g <- ggraph(g1_flooding, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Flooding') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -524,7 +622,7 @@ g <- ggraph(g1_groundwater, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Groundwater') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -589,7 +687,7 @@ g <- ggraph(g1_innovation, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(18,16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Innovation') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -656,7 +754,7 @@ g <- ggraph(g1_municipal, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Municipal') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -721,7 +819,7 @@ g <- ggraph(g1_oilandgas, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Oil and Gas') +
   theme(
     text = element_text('Helvetica', size = 24),
@@ -787,7 +885,7 @@ g <- ggraph(g1_rural, layout = 'fr') +
   scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_shape_manual(values=c(18,16,17,15))+
   scale_size_area(max_size = 10) +
-  theme_graph() +
+  theme_graph(title_size = 34) +
   labs(title = 'Rural') +
   theme(
     text = element_text('Helvetica', size = 24),

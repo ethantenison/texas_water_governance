@@ -1,8 +1,11 @@
 ---
-title: "Texas Water Governance System Mapping "
+title: 'Texas Water Governance System Mapping '
 author: "Patrick Bixler"
 date: "01/13/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
 ---
 
 ```{r include=FALSE}
@@ -117,13 +120,13 @@ colnames(DF_Centrality)[1]<-"name"
 colnames(DF_Centrality)[4]<-"TotalDegree"
 
 
-par(mfcol = c(4,3)) 
-hist(inDegree)
-hist(outDegree)
-hist(TotalDegree)
-hist(betweenness)
-hist(inCloseness)
-hist(outCloseness)
+# par(mfcol = c(4,3)) 
+# hist(inDegree)
+# hist(outDegree)
+# hist(TotalDegree)
+# hist(betweenness)
+# hist(inCloseness)
+# hist(outCloseness)
 
 dd.g1<-degree.distribution(g1)
 d<-1:max(TotalDegree)-1
@@ -348,7 +351,7 @@ viz <- visNetwork(allnodes, alledges, main = "Policy and Governance Across Texas
   ) %>% 
   visLegend(useGroups = TRUE)
 
-visSave(viz, "media/simplied_all_network.html", selfcontained = TRUE, background = "white")
+#visSave(viz, "media/simplied_all_network.html", selfcontained = TRUE, background = "white")
 
 ```
 
