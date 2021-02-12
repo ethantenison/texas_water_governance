@@ -29,6 +29,67 @@ e1[,3]=as.character(e1[,3])
 e1[,4]=as.character(e1[,4])
 e1[,5]=as.character(e1[,5])
 
+#Edge Colors
+edge_colors <- 
+  c(
+      "#eb7df4",# "Advocacy/Policy Preference",
+      "#f6eb14",#   "Information",
+      "#ec008c",#   "Authority to set rules",
+      "#00b294",#   "Contract",
+      "#ec008c",#   "Cooperation/coordination",
+      "#97c2fc",#   "Water",                      
+      "#ec008c",#   "Regulation/Oversight",
+      "#7be141",#   "Money",
+      "#ad85e4",#   "Lobbying",
+      "#eb7df4", #   "Membership",
+      "#00b294",#   "Water sales,
+      "gray"
+  )
+
+
+names(edge_colors) <- c(
+    "Advocacy/Policy Preference",
+    "Information",
+    "Authority to set rules",
+    "Contract",
+    "Cooperation/coordination",
+    "Water",                      
+    "Regulation/Oversight",
+    "Money",
+    "Lobbying",
+    "Membership",
+    "Water sales"
+)
+
+
+#Node Colors
+node_colors <- c("#fb7e81",
+                    "#ad85e4",
+                    "#7be141",
+                    "#ffa807",
+                    "#0000CD",
+                    "#97c2fc",
+                    "#eb7df4")
+
+
+names(node_colors) <- c(
+  "Government",
+  "NGO",
+  "Private",
+  "Utilities",
+  "Physical Feature",
+  "Academic",
+  "Public"
+)
+
+
+for (i in 1:length(el1$type)){
+  if (any(names(edge_colors) %in% el1$type[i]) == FALSE){
+    el1$type[i] <- "Other"
+  }
+}
+
+
 g1<-graph_from_data_frame(d=el1,directed=TRUE) 
 #Some stats like communities and clusters need undirected graphs. Mode = collapse creates an undirected link between any pair of connected nodes. 
 #g1<-as.undirected(g1, mode= "collapse")
@@ -100,6 +161,22 @@ e1_innovation<-as.matrix(el1_innovation)
 el1_municipal<-el1[which(el1$sector=="Municipal"),]
 g1_municipal<-graph_from_data_frame(d=el1_municipal,directed=TRUE) 
 e1_municipal<-as.matrix(el1_municipal)
+
+
+names(edge_colors) <- c(
+    "Advocacy/Policy Preference",
+    "Information",
+    "Authority to set rules",
+    "Contract",
+    "Cooperation/coordination",
+    "Water",                      
+    "Regulation/Oversight",
+    "Money",
+    "Lobbying",
+    "Membership",
+    "Water sales",
+    "Other"
+)
 ```
 
 $~$
@@ -145,47 +222,7 @@ input_attributes<-txwater_centrality
 ```
 
 
-
-## Full network
-
-
-```{r full_network, message=FALSE, warning=FALSE}
-
-#node attributes
-for (i in 1:vcount(g1))
-{
-V(g1)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1)[i]$name)]
-V(g1)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1)[i]$name)]
-V(g1)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1)[i]$name)]
-V(g1)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1)[i]$name)]
-}
-
-V(g1)$size<-V(g1)$size*2
-g1_ext <- g1
-
-gvis_ext <- toVisNetworkData(g1_ext)
-
-allnodes <- gvis_ext$nodes
-
-
-alledges <- gvis_ext$edges
-
-
-graph_all <- tbl_graph(nodes = allnodes, edges = alledges, directed = TRUE)
-
-
-g <- ggraph(graph_all) +
-        geom_edge_link(color="black", width = 1, alpha = 0.5) +
-        geom_node_point(aes(color = type, size = size)) + 
-        #geom_node_text(aes(label=id), size = 3, color = "gray50", repel = T)
-        #theme_void()
-
-g 
-```
-
-
-
-
+# Full Network 
 
 ```{r ggplot, message=FALSE, warning=FALSE}
 library(extrafont)
@@ -199,27 +236,6 @@ edges <- gvis_ext$edges
 
 
 graph <- graph_from_data_frame(vertices = nodes, d = edges, directed = TRUE)
-
-
-#Program Colors
-node_colors <- c("#fb7e81",
-                    "#ad85e4",
-                    "#7be141",
-                    "#ffa807",
-                    "#f6eb14",
-                    "#97c2fc",
-                    "#eb7df4")
-
-
-names(node_colors) <- c(
-  "Government",
-  "NGO",
-  "Private",
-  "Utilities",
-  "Physical Feature",
-  "Academic",
-  "Public"
-)
 
 
 g <- ggraph(graph, layout = 'fr') +
@@ -269,8 +285,6 @@ ggsave(
 ```
 
 
-
-
 ## Agriculture
 
 ```{r agriculture, message=FALSE, warning=FALSE}
@@ -284,48 +298,6 @@ V(g1_agriculture)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 }
 
 
-E(g1_agriculture)[E(g1_agriculture)$type=="Money"]$color <-"#7be141" #18% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Information"]$color <-"#f6eb14" #18% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Membership"]$color <-"#eb7df4" #%11% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Lobbying"]$color <-"#ad85e4" #10% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Water"]$color <-"#97c2fc" #8% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Regulation/Oversight"]$color <-"#fb7e81" #6% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Water sales"]$color <-"#00b294" #25% of ties in AG
-
-
-
-ledges_ag <-
-  data.frame(
-    label = c(
-      "Money",
-      "Information",
-      "Membership",
-      "Lobbying",
-      "Water",
-      "Regulation/Oversight",
-      "Water Sales",
-      "Other"
-    ),
-    arrows = c("to"),
-    color = c(
-      "#7be141",
-      "#f6eb14",
-      "#eb7df4",
-      "#ad85e4",
-      "#97c2fc",
-      "#fb7e81",
-      "#00b294",
-      "gray"
-    )
-  )
-
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Government")]$color<-"#fb7e81"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="NGO")]$color<-"#ad85e4"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Private")]$color<-"#7be141"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Utilities")]$color<-"#ffa807"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Academic")]$color<-"gray"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Public")]$color<-"Yellow"
-
 V(g1_agriculture)[which(V(g1_agriculture)$level=="Local")]$shape<-"dot"
 V(g1_agriculture)[which(V(g1_agriculture)$level=="Regional")]$shape<-"triangle"
 V(g1_agriculture)[which(V(g1_agriculture)$level=="Statewide")]$shape<-"square"
@@ -335,17 +307,20 @@ g <- ggraph(g1_agriculture, layout = 'fr') +
   geom_edge_link(
     aes(edge_color = node1.type),
     edge_width = 1,
-    edge_alpha = 0.6
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
   ) +
-  geom_node_point(aes(size = size * 10, color = type, shape = level)) +
-   geom_node_text(
-      aes(
-        x = x,
-        y = y - .1,
-        label = label
-      ) +
+  geom_node_point(aes(
+    size = size * 10,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  #scale_edge_color_manual(values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
   scale_size_area(max_size = 10) +
   theme_graph() +
   labs(title = 'Agriculture') +
@@ -355,13 +330,15 @@ g <- ggraph(g1_agriculture, layout = 'fr') +
       face = 'bold',
       hjust = 0.5,
       margin = margin(t = 45, b = 3)
-    )),
+    ),
     plot.margin = margin(0, 0, 0, 0)
   ) +
-  guides(size = "none",
-         color = guide_legend(override.aes = list(size = 5)),
-         edge_color = "none",
-         shape = guide_legend(override.aes = list(size = 5)))
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
 
 
 g
@@ -378,5 +355,465 @@ ggsave(
 
 ```
 
+# Environment 
 
 
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_environment))
+{
+V(g1_environment)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_environment)[i]$name)]
+V(g1_environment)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_environment)[i]$name)]
+V(g1_environment)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_environment)[i]$name)]
+V(g1_environment)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_environment)[i]$name)]
+}
+
+V(g1_environment)[which(V(g1_environment)$level=="Local")]$shape<-"dot"
+V(g1_environment)[which(V(g1_environment)$level=="Regional")]$shape<-"triangle"
+V(g1_environment)[which(V(g1_environment)$level=="Statewide")]$shape<-"square"
+
+
+g <- ggraph(g1_environment, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 10,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(18,16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Environment') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/environment.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
+
+# Flooding
+
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_flooding))
+{
+V(g1_flooding)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_flooding)[i]$name)]
+V(g1_flooding)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_flooding)[i]$name)]
+V(g1_flooding)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_flooding)[i]$name)]
+V(g1_flooding)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_flooding)[i]$name)]
+}
+
+
+g <- ggraph(g1_flooding, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 20,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Flooding') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/flooding.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
+## Groundwater
+
+
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_groundwater))
+{
+V(g1_groundwater)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_groundwater)[i]$name)]
+V(g1_groundwater)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_groundwater)[i]$name)]
+V(g1_groundwater)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_groundwater)[i]$name)]
+V(g1_groundwater)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_groundwater)[i]$name)]
+}
+
+
+g <- ggraph(g1_groundwater, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 10,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Groundwater') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/groundwater.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
+## Innovation
+
+
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_innovation))
+{
+V(g1_innovation)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_innovation)[i]$name)]
+V(g1_innovation)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_innovation)[i]$name)]
+V(g1_innovation)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_innovation)[i]$name)]
+V(g1_innovation)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_innovation)[i]$name)]
+}
+
+
+g <- ggraph(g1_innovation, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 20,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(18,16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Innovation') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/innovation.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
+
+
+## Municipal
+
+
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_municipal))
+{
+V(g1_municipal)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_municipal)[i]$name)]
+V(g1_municipal)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_municipal)[i]$name)]
+V(g1_municipal)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_municipal)[i]$name)]
+V(g1_municipal)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_municipal)[i]$name)]
+}
+
+
+g <- ggraph(g1_municipal, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 20,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Municipal') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/municipal.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
+
+## Oil and Gas
+
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_oilandgas))
+{
+V(g1_oilandgas)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_oilandgas)[i]$name)]
+V(g1_oilandgas)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_oilandgas)[i]$name)]
+V(g1_oilandgas)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_oilandgas)[i]$name)]
+V(g1_oilandgas)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_oilandgas)[i]$name)]
+}
+
+
+g <- ggraph(g1_oilandgas, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 20,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Oil and Gas') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/oilandgas.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```
+
+
+## Rural Water
+
+```{r environment, message=FALSE, warning=FALSE}
+
+#Define Attributes
+for (i in 1:vcount(g1_rural))
+{
+V(g1_rural)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_rural)[i]$name)]
+V(g1_rural)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_rural)[i]$name)]
+V(g1_rural)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_rural)[i]$name)]
+V(g1_rural)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_rural)[i]$name)]
+}
+
+
+g <- ggraph(g1_rural, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6,
+    arrow = arrow(length = unit(4, 'mm')),
+    end_cap = circle(3, 'mm')
+  ) +
+  geom_node_point(aes(
+    size = size * 20,
+    color = type,
+    shape = level
+  )) +
+  geom_node_text(aes(x = x,
+                     y = y - .1,
+                     label = label)) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_shape_manual(values=c(18,16,17,15))+
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Rural') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(
+    size = "none",
+    color = guide_legend(override.aes = list(size = 5)),
+    edge_color = "none",
+    shape = guide_legend(override.aes = list(size = 5))
+  )
+
+
+g
+
+ggsave(
+  'media/rural.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+```

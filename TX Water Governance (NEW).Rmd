@@ -14,6 +14,8 @@ source("utils1.R")
 
 #edgelist 
 el1<-el1
+
+
 e1<-as.matrix(el1)
 e1[,1]=as.character(e1[,1])
 e1[,2]=as.character(e1[,2])
