@@ -33,6 +33,7 @@ library(plotly)
 library(DiagrammeR)
 library(DiagrammeRsvg)
 library(motifr)
+library(extrafont)
 
 
 #load data

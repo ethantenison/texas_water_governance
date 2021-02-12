@@ -1,0 +1,382 @@
+---
+title: "Texas Water Governance - Static Networks"
+author: "Ethan"
+date: "2/10/2021"
+output: html_document
+---
+
+```{r include=FALSE}
+source("utils1.R")
+
+packages = c('tidygraph', 'ggraph', 'visNetwork', 'lubridate', 'tidyverse')
+
+for(p in packages){library
+  if(!require(p, character.only = T)){
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
+```
+
+```{r Clean Network Data, include=FALSE}
+
+#edgelist 
+el1<-el1
+e1<-as.matrix(el1)
+e1[,1]=as.character(e1[,1])
+e1[,2]=as.character(e1[,2])
+e1[,3]=as.character(e1[,3])
+e1[,4]=as.character(e1[,4])
+e1[,5]=as.character(e1[,5])
+
+g1<-graph_from_data_frame(d=el1,directed=TRUE) 
+#Some stats like communities and clusters need undirected graphs. Mode = collapse creates an undirected link between any pair of connected nodes. 
+#g1<-as.undirected(g1, mode= "collapse")
+
+#Create a nodelist for excel use 
+gvis<-toVisNetworkData(g1)
+nodelist<-gvis$nodes
+nodelist<-nodelist[,1]
+nodelist<-as.data.frame(nodelist)
+names(nodelist)<-c("name")
+
+write.csv(nodelist,file = "nodelist.csv")
+
+# Pull the node list with attributes
+input_attributes<-a1
+
+#Define Attributes
+for (i in 1:vcount(g1))
+{
+V(g1)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1)[i]$name)]
+V(g1)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1)[i]$name)]
+V(g1)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1)[i]$name)]
+}
+
+####Agriculture####
+#new dataframe and igraph object with only "agriculture" ties
+el1_agriculture<-el1[which(el1$sector=="Agriculture"),]
+g1_agriculture<-graph_from_data_frame(d=el1_agriculture,directed=TRUE) 
+e1_agriculture<-as.matrix(el1_agriculture)
+
+####Groundwater####
+#new dataframe and igraph object with only "Groundwater" ties
+el1_groundwater<-el1[which(el1$sector=="Groundwater"),]
+g1_groundwater<-graph_from_data_frame(d=el1_groundwater,directed=TRUE) 
+e1_groundwater<-as.matrix(el1_groundwater)
+
+####Oil and Gas####
+#new dataframe and igraph object with only "Oil and Gas" ties
+el1_oilandgas<-el1[which(el1$sector=="Oil and Gas"),]
+g1_oilandgas<-graph_from_data_frame(d=el1_oilandgas,directed=TRUE) 
+e1_oilandgas<-as.matrix(el1_oilandgas)
+
+####flooding####
+#new dataframe and igraph object with only "flooding" ties
+el1_flooding<-el1[which(el1$sector=="Flooding"),]
+g1_flooding<-graph_from_data_frame(d=el1_flooding,directed=TRUE) 
+e1_flooding<-as.matrix(el1_flooding)
+
+####rural####
+#new dataframe and igraph object with only "rural" ties
+el1_rural<-el1[which(el1$sector=="Rural Utilities"),]
+g1_rural<-graph_from_data_frame(d=el1_rural,directed=TRUE) 
+e1_rural<-as.matrix(el1_rural)
+
+####environment####
+#new dataframe and igraph object with only "environment" ties
+el1_environment<-el1[which(el1$sector=="Environment"),]
+g1_environment<-graph_from_data_frame(d=el1_environment,directed=TRUE) 
+e1_environment<-as.matrix(el1_environment)
+
+####innovation####
+#new dataframe and igraph object with only "innovation" ties
+el1_innovation<-el1[which(el1$sector=="Innovation"),]
+g1_innovation<-graph_from_data_frame(d=el1_innovation,directed=TRUE) 
+e1_innovation<-as.matrix(el1_innovation)
+
+####municipal####
+#new dataframe and igraph object with only "municipal" ties
+el1_municipal<-el1[which(el1$sector=="Municipal"),]
+g1_municipal<-graph_from_data_frame(d=el1_municipal,directed=TRUE) 
+e1_municipal<-as.matrix(el1_municipal)
+```
+
+$~$
+
+## Ego-centric Network Measures
+```{r network statistics, include = FALSE, echo=FALSE, warning=FALSE}
+#Degree in 
+inDegree<-igraph::degree(g1,mode="in")
+outDegree<-igraph::degree(g1,mode="out")
+TotalDegree<-as.data.frame(igraph::degree(g1))
+betweenness<-igraph::betweenness(g1, v = V(g1), directed = TRUE, weights = NULL,
+  nobigint = TRUE, normalized = TRUE)
+inCloseness<-igraph::closeness(g1, vids = V(g1), mode = c("in"),normalized = TRUE)
+outCloseness<-igraph::closeness(g1, vids = V(g1), mode = c("out"),normalized = TRUE)
+#eigen<-evcent(m1,g=1,gmode = "digraph",rescale=TRUE, ignore.eval=TRUE)
+#removed eigen from this DF_Centrality
+DF_Centrality<-as.data.frame(cbind(rownames(TotalDegree),inDegree,outDegree,TotalDegree,betweenness,inCloseness,outCloseness))
+rownames(DF_Centrality)<-NULL
+DF_Centrality<-as.data.frame(DF_Centrality)
+colnames(DF_Centrality)[1]<-"name"
+colnames(DF_Centrality)[4]<-"TotalDegree"
+
+
+par(mfcol = c(4,3)) 
+hist(inDegree)
+hist(outDegree)
+hist(TotalDegree)
+hist(betweenness)
+hist(inCloseness)
+hist(outCloseness)
+
+dd.g1<-degree.distribution(g1)
+d<-1:max(TotalDegree)-1
+ind<-(dd.g1 != 0)
+plot(d[ind],dd.g1[ind],log="xy",col="blue",xlab=c("Log-degree"),ylab=c("Log-Intensity"),
+     main="Log-Log Degree Distribution")
+
+txwater_centrality<-merge(DF_Centrality, a1, by = "name")
+write.csv(txwater_centrality,file = "TX Water Centrality.csv")
+
+input_attributes<-txwater_centrality
+
+```
+
+
+
+## Full network
+
+
+```{r full_network, message=FALSE, warning=FALSE}
+
+#node attributes
+for (i in 1:vcount(g1))
+{
+V(g1)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1)[i]$name)]
+V(g1)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1)[i]$name)]
+V(g1)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1)[i]$name)]
+V(g1)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1)[i]$name)]
+}
+
+V(g1)$size<-V(g1)$size*2
+g1_ext <- g1
+
+gvis_ext <- toVisNetworkData(g1_ext)
+
+allnodes <- gvis_ext$nodes
+
+
+alledges <- gvis_ext$edges
+
+
+graph_all <- tbl_graph(nodes = allnodes, edges = alledges, directed = TRUE)
+
+
+g <- ggraph(graph_all) +
+        geom_edge_link(color="black", width = 1, alpha = 0.5) +
+        geom_node_point(aes(color = type, size = size)) + 
+        #geom_node_text(aes(label=id), size = 3, color = "gray50", repel = T)
+        #theme_void()
+
+g 
+```
+
+
+
+
+
+```{r ggplot, message=FALSE, warning=FALSE}
+library(extrafont)
+loadfonts()
+
+set.seed(27)
+
+nodes <- sort(gvis_ext$nodes)
+nodes$size <- nodes$size*10
+edges <- gvis_ext$edges
+
+
+graph <- graph_from_data_frame(vertices = nodes, d = edges, directed = TRUE)
+
+
+#Program Colors
+node_colors <- c("#fb7e81",
+                    "#ad85e4",
+                    "#7be141",
+                    "#ffa807",
+                    "#f6eb14",
+                    "#97c2fc",
+                    "#eb7df4")
+
+
+names(node_colors) <- c(
+  "Government",
+  "NGO",
+  "Private",
+  "Utilities",
+  "Physical Feature",
+  "Academic",
+  "Public"
+)
+
+
+g <- ggraph(graph, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6
+  ) +
+  geom_node_point(aes(size = size * 10, color = type)) +
+  geom_node_text(
+     aes(
+       x = x,
+       y = y - .4,
+       label = ifelse(
+         size > 400, 
+         label, 
+         ""))
+     ) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  scale_edge_color_manual(values = node_colors) +
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Policy and Governance across Texas Water Sector') +
+  theme(
+    text = element_text('Helvetica', size = 20),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    ),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(size = "none",
+         color = guide_legend(override.aes = list(size = 5)),
+         edge_color = "none")
+
+
+g
+
+ggsave(
+  'media/all_network.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+```
+
+
+
+
+## Agriculture
+
+```{r agriculture, message=FALSE, warning=FALSE}
+
+for (i in 1:vcount(g1_agriculture))
+{
+V(g1_agriculture)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1_agriculture)[i]$name)]
+V(g1_agriculture)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1_agriculture)[i]$name)]
+V(g1_agriculture)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_agriculture)[i]$name)]
+V(g1_agriculture)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_agriculture)[i]$name)]
+}
+
+
+E(g1_agriculture)[E(g1_agriculture)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Membership"]$color <-"#eb7df4" #%11% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Lobbying"]$color <-"#ad85e4" #10% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Water"]$color <-"#97c2fc" #8% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Regulation/Oversight"]$color <-"#fb7e81" #6% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Water sales"]$color <-"#00b294" #25% of ties in AG
+
+
+
+ledges_ag <-
+  data.frame(
+    label = c(
+      "Money",
+      "Information",
+      "Membership",
+      "Lobbying",
+      "Water",
+      "Regulation/Oversight",
+      "Water Sales",
+      "Other"
+    ),
+    arrows = c("to"),
+    color = c(
+      "#7be141",
+      "#f6eb14",
+      "#eb7df4",
+      "#ad85e4",
+      "#97c2fc",
+      "#fb7e81",
+      "#00b294",
+      "gray"
+    )
+  )
+
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Government")]$color<-"#fb7e81"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="NGO")]$color<-"#ad85e4"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Private")]$color<-"#7be141"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Utilities")]$color<-"#ffa807"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Academic")]$color<-"gray"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Public")]$color<-"Yellow"
+
+V(g1_agriculture)[which(V(g1_agriculture)$level=="Local")]$shape<-"dot"
+V(g1_agriculture)[which(V(g1_agriculture)$level=="Regional")]$shape<-"triangle"
+V(g1_agriculture)[which(V(g1_agriculture)$level=="Statewide")]$shape<-"square"
+
+
+g <- ggraph(g1_agriculture, layout = 'fr') +
+  geom_edge_link(
+    aes(edge_color = node1.type),
+    edge_width = 1,
+    edge_alpha = 0.6
+  ) +
+  geom_node_point(aes(size = size * 10, color = type, shape = level)) +
+   geom_node_text(
+      aes(
+        x = x,
+        y = y - .1,
+        label = label
+      ) +
+  scale_color_manual(name = "Type of Organization", values = node_colors) +
+  #scale_edge_color_manual(values = node_colors) +
+  scale_size_area(max_size = 10) +
+  theme_graph() +
+  labs(title = 'Agriculture') +
+  theme(
+    text = element_text('Helvetica', size = 24),
+    plot.title = element_text(
+      face = 'bold',
+      hjust = 0.5,
+      margin = margin(t = 45, b = 3)
+    )),
+    plot.margin = margin(0, 0, 0, 0)
+  ) +
+  guides(size = "none",
+         color = guide_legend(override.aes = list(size = 5)),
+         edge_color = "none",
+         shape = guide_legend(override.aes = list(size = 5)))
+
+
+g
+
+ggsave(
+  'media/agriculture.png',
+  width = 16,
+  height = 12,
+  dpi = 500
+)
+
+
+
+
+```
+
+
+

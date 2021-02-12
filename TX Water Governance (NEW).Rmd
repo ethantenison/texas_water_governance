@@ -8,9 +8,6 @@ output: html_document
 ```{r include=FALSE}
 source("utils1.R")
 
-
-colors <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
-          "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#b19cd9")
 ```
 
 ```{r Clean Network Data, include=FALSE}
@@ -138,6 +135,7 @@ write.csv(txwater_centrality,file = "TX Water Centrality.csv")
 input_attributes<-txwater_centrality
 
 ```
+
 System Map Graphs 
 
 **The Interactions of Policy and Governance Across Texas Water Sectors**
@@ -152,22 +150,25 @@ row.names(nodes) <- nodes[['id']]
 #node attributes
 for (i in 1:vcount(g1))
 {
-V(g1)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1)[i]$name)]
+#V(g1)[i]$label<-input_attributes$label[which(input_attributes$name==V(g1)[i]$name)]
 V(g1)[i]$level<-input_attributes$level[which(input_attributes$name==V(g1)[i]$name)]
 V(g1)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1)[i]$name)]
 V(g1)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1)[i]$name)]
 }
 
-V(g1)$size<-V(g1)$size*1.5
+#V(g1)$size<-V(g1)$size*1.5
+g1_ext <- g1
 
-E(g1)[E(g1)$sector=="Agriculture"]$color <-"#004e24"
+
+
+E(g1)[E(g1)$sector=="Agriculture"]$color <-"#7be141"
 E(g1)[E(g1)$sector=="Environment"]$color <-"#00b294"
-E(g1)[E(g1)$sector=="Flooding"]$color <-"#00bcf2"
-E(g1)[E(g1)$sector=="Groundwater"]$color <-"#00188f"
-E(g1)[E(g1)$sector=="Oil and Gas"]$color <-"#e81123"
-E(g1)[E(g1)$sector=="Rural Utilities"]$color <-"#ff8C00"
+E(g1)[E(g1)$sector=="Flooding"]$color <-"#97c2fc"
+E(g1)[E(g1)$sector=="Groundwater"]$color <-"#ad85e4"
+E(g1)[E(g1)$sector=="Oil and Gas"]$color <-"#fb7e81"
+E(g1)[E(g1)$sector=="Rural Utilities"]$color <-"#ffa807"
 E(g1)[E(g1)$sector=="Innovation"]$color <-"#ec008c"
-E(g1)[E(g1)$sector=="Municipal"]$color <-"#c77adb"
+E(g1)[E(g1)$sector=="Municipal"]$color <-"#eb7df4"
 
 ledges <-
   data.frame(
@@ -183,25 +184,25 @@ ledges <-
     ),
     arrows = c("to"),
     color = c(
-      "#004e24",
+      "#7be141",
       "#00b294",
-      "#00bcf2",
-      "#00188f",
-      "#e81123",
-      "#ff8C00",
+      "#97c2fc",
+      "#ad85e4",
+      "#fb7e81",
+      "#ffa807",
       "#ec008c",
-      "#c77adb"
+      "#eb7df4"
     )
   )
 
 
-V(g1)[which(V(g1)$type=="Government")]$color<-"#e81123"
-V(g1)[which(V(g1)$type=="NGO")]$color<-"#00188f"
-V(g1)[which(V(g1)$type=="Private")]$color<-"#004e24"
-V(g1)[which(V(g1)$type=="Utilities")]$color<-"#ff8C00"
-V(g1)[which(V(g1)$type=="Physical Feature")]$color<-"#black"
-V(g1)[which(V(g1)$type=="Academic")]$color<-"#00bcf2"
-V(g1)[which(V(g1)$type=="Public")]$color<- "#c77adb"
+V(g1)[which(V(g1)$type=="Government")]$color<-"#fb7e81"
+V(g1)[which(V(g1)$type=="NGO")]$color<-"#ad85e4"
+V(g1)[which(V(g1)$type=="Private")]$color<-"#7be141"
+V(g1)[which(V(g1)$type=="Utilities")]$color<-"#ffa807"
+V(g1)[which(V(g1)$type=="Physical Feature")]$color<-"#f6eb14"
+V(g1)[which(V(g1)$type=="Academic")]$color<-"#97c2fc"
+V(g1)[which(V(g1)$type=="Public")]$color<- "#eb7df4"
 
 V(g1)[which(V(g1)$level=="Local")]$shape<-"dot"
 V(g1)[which(V(g1)$level=="Regional")]$shape<-"triangle"
@@ -224,13 +225,13 @@ lnodes <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#c77adb",
-      "#ff8C00",
-      "black",
-      "#00bcf2",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#eb7df4",
+      "#ffa807",
+      "#f6eb14",
+      "#97c2fc",
       "white",
       "white",
       "white"
@@ -261,11 +262,11 @@ lnodes <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
       "black",
       "black",
-      "white",
+      "black",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -322,6 +323,33 @@ viz_all$x$nodes <- viz_all$x$nodes %>% left_join(nodes, by = 'id') %>% select(-c
 viz_all
 ```
 
+```{r all_network, message=FALSE, warning=FALSE}
+
+gvis_ext <- toVisNetworkData(g1_ext)
+
+allnodes <- gvis_ext$nodes
+allnodes <- allnodes %>% rename(group = type)
+
+alledges <- gvis_ext$edges
+
+viz <- visNetwork(allnodes, alledges, main = "Policy and Governance Across Texas Water Sectors",
+    width = "100%",
+    height = "700") %>%
+  visIgraphLayout(layout = "layout_with_fr", physics = FALSE, randomSeed = 27) %>% 
+  visEdges(
+    smooth = F,
+    arrows = "to") %>%
+  visOptions(
+    selectedBy = list(variable = c("group"), multiple = TRUE),
+    highlightNearest = list(enabled = T, hover = T),
+    nodesIdSelection = TRUE
+  ) %>% 
+  visLegend(useGroups = TRUE)
+
+visSave(viz, "media/simplied_all_network.html", selfcontained = TRUE, background = "white")
+
+```
+
 
 **Agriculture**
 ```{r echo=FALSE}
@@ -336,12 +364,12 @@ V(g1_agriculture)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 }
 
 
-E(g1_agriculture)[E(g1_agriculture)$type=="Money"]$color <-"#004e24" #18% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Membership"]$color <-"#c77adb" #%11% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Lobbying"]$color <-"#00188f" #10% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Water"]$color <-"#00bcf2" #8% of all ties
-E(g1_agriculture)[E(g1_agriculture)$type=="Regulation/Oversight"]$color <-"#e81123" #6% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Membership"]$color <-"#eb7df4" #%11% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Lobbying"]$color <-"#ad85e4" #10% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Water"]$color <-"#97c2fc" #8% of all ties
+E(g1_agriculture)[E(g1_agriculture)$type=="Regulation/Oversight"]$color <-"#fb7e81" #6% of all ties
 E(g1_agriculture)[E(g1_agriculture)$type=="Water sales"]$color <-"#00b294" #25% of ties in AG
 
 
@@ -360,21 +388,21 @@ ledges_ag <-
     ),
     arrows = c("to"),
     color = c(
-      "#004e24",
-      "black",
-      "#c77adb",
-      "#00188f",
-      "#00bcf2",
-      "#e81123",
+      "#7be141",
+      "#f6eb14",
+      "#eb7df4",
+      "#ad85e4",
+      "#97c2fc",
+      "#fb7e81",
       "#00b294",
       "gray"
     )
   )
 
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Government")]$color<-"#e81123"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="NGO")]$color<-"#00188f"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Private")]$color<-"#004e24"
-V(g1_agriculture)[which(V(g1_agriculture)$type=="Utilities")]$color<-"#ff8C00"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Government")]$color<-"#fb7e81"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="NGO")]$color<-"#ad85e4"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Private")]$color<-"#7be141"
+V(g1_agriculture)[which(V(g1_agriculture)$type=="Utilities")]$color<-"#ffa807"
 V(g1_agriculture)[which(V(g1_agriculture)$type=="Academic")]$color<-"gray"
 V(g1_agriculture)[which(V(g1_agriculture)$type=="Public")]$color<-"Yellow"
 
@@ -394,7 +422,7 @@ lnodes_ag <-
       "Regional",
       "Statewide"
     ),
-    color.background = c("#e81123", "#00188f", "#004e24", "#ff8C00", "white", "white", "white"),
+    color.background = c("#fb7e81", "#ad85e4", "#7be141", "#ffa807", "white", "white", "white"),
     color.border = c("black", "black", "black","black", "black", "black", "black"),
     shape = c(
       "box",
@@ -407,8 +435,8 @@ lnodes_ag <-
     ),
     font.color = c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -452,10 +480,10 @@ V(g1_environment)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 }
 
 
-E(g1_environment)[E(g1_environment)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_environment)[E(g1_environment)$type=="Lobbying"]$color <-"#00188f" #10% of all ties
+E(g1_environment)[E(g1_environment)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_environment)[E(g1_environment)$type=="Lobbying"]$color <-"#ad85e4" #10% of all ties
 E(g1_environment)[E(g1_environment)$type=="Cooperation/coordination"]$color <-"#ec008c" #40% of ENV ties
-E(g1_environment)[E(g1_environment)$type=="Advocacy/Policy Preference"]$color <-"#c77adb" #40% of ENV ties
+E(g1_environment)[E(g1_environment)$type=="Advocacy/Policy Preference"]$color <-"#eb7df4" #40% of ENV ties
 
 
 ledges_env <-
@@ -468,18 +496,18 @@ ledges_env <-
       "Other"
     ),
     arrows = c("to"),
-    color = c("black", "#00188f", "#ec008c", "#c77adb", "gray")
+    color = c("#f6eb14", "#ad85e4", "#ec008c", "#eb7df4", "gray")
   )
 
 
 
-V(g1_environment)[which(V(g1_environment)$type=="Government")]$color<-"#e81123"
-V(g1_environment)[which(V(g1_environment)$type=="NGO")]$color<-"#00188f"
-V(g1_environment)[which(V(g1_environment)$type=="Private")]$color<-"#004e24"
-V(g1_environment)[which(V(g1_environment)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_environment)[which(V(g1_environment)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_environment)[which(V(g1_environment)$type=="Academic")]$color<-"#00bcf2"
-V(g1_environment)[which(V(g1_environment)$type=="Public")]$color<- "#c77adb"
+V(g1_environment)[which(V(g1_environment)$type=="Government")]$color<-"#fb7e81"
+V(g1_environment)[which(V(g1_environment)$type=="NGO")]$color<-"#ad85e4"
+V(g1_environment)[which(V(g1_environment)$type=="Private")]$color<-"#7be141"
+V(g1_environment)[which(V(g1_environment)$type=="Utilities")]$color<-"#ffa807"
+V(g1_environment)[which(V(g1_environment)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_environment)[which(V(g1_environment)$type=="Academic")]$color<-"#97c2fc"
+V(g1_environment)[which(V(g1_environment)$type=="Public")]$color<- "#eb7df4"
 
 
 
@@ -503,12 +531,12 @@ lnodes_env <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#ff8C00",
-      "#00bcf2",
-      "#c77adb",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#ffa807",
+      "#97c2fc",
+      "#eb7df4",
       "white",
       "white",
       "white"
@@ -587,27 +615,27 @@ V(g1_flooding)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_
 V(g1_flooding)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_flooding)[i]$name)]
 }
 
-E(g1_flooding)[E(g1_flooding)$type=="Money"]$color <-"#004e24" #18% of all ties
-E(g1_flooding)[E(g1_flooding)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_flooding)[E(g1_flooding)$type=="Membership"]$color <-"#c77adb" #%11% of all ties
+E(g1_flooding)[E(g1_flooding)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_flooding)[E(g1_flooding)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_flooding)[E(g1_flooding)$type=="Membership"]$color <-"#eb7df4" #%11% of all ties
 
 
 
 ledges_flood <-
   data.frame(
-    label = c("Money", "Information", "Membership", "Other"),
+    label = c("Money", "Membership", "Other"),
     arrows = c("to"),
-    color = c("#004e24", "black", "#c77adb", "gray")
+    color = c("#7be141", "#eb7df4", "gray")
   )
 
 
-V(g1_flooding)[which(V(g1_flooding)$type=="Government")]$color<-"#e81123"
-V(g1_flooding)[which(V(g1_flooding)$type=="NGO")]$color<-"#00188f"
-V(g1_flooding)[which(V(g1_flooding)$type=="Private")]$color<-"#004e24"
-V(g1_flooding)[which(V(g1_flooding)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_flooding)[which(V(g1_flooding)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_flooding)[which(V(g1_flooding)$type=="Academic")]$color<-"#00bcf2"
-V(g1_flooding)[which(V(g1_flooding)$type=="Public")]$color<- "#c77adb"
+V(g1_flooding)[which(V(g1_flooding)$type=="Government")]$color<-"#fb7e81"
+V(g1_flooding)[which(V(g1_flooding)$type=="NGO")]$color<-"#ad85e4"
+V(g1_flooding)[which(V(g1_flooding)$type=="Private")]$color<-"#7be141"
+V(g1_flooding)[which(V(g1_flooding)$type=="Utilities")]$color<-"#ffa807"
+V(g1_flooding)[which(V(g1_flooding)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_flooding)[which(V(g1_flooding)$type=="Academic")]$color<-"#97c2fc"
+V(g1_flooding)[which(V(g1_flooding)$type=="Public")]$color<- "#eb7df4"
 
 V(g1_flooding)[which(V(g1_flooding)$level=="Local")]$shape<-"dot"
 V(g1_flooding)[which(V(g1_flooding)$level=="Regional")]$shape<-"triangle"
@@ -628,11 +656,11 @@ lnodes_flood <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#ff8C00",
-      "#c77adb",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#ffa807",
+      "#eb7df4",
       "white",
       "white",
       "white"
@@ -659,8 +687,8 @@ lnodes_flood <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -707,11 +735,11 @@ V(g1_groundwater)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 
 
 
-E(g1_groundwater)[E(g1_groundwater)$type=="Money"]$color <-"#004e24" #18% of all ties
-E(g1_groundwater)[E(g1_groundwater)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_groundwater)[E(g1_groundwater)$type=="Membership"]$color <-"#c77adb" #%11% of all ties
-E(g1_groundwater)[E(g1_groundwater)$type=="Regulation/Oversight"]$color <-"#e81123" #6% of all ties
-E(g1_groundwater)[E(g1_groundwater)$type=="Advocacy/Policy Preference"]$color <-"#00bcf2" #40% of ENV ties
+E(g1_groundwater)[E(g1_groundwater)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_groundwater)[E(g1_groundwater)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_groundwater)[E(g1_groundwater)$type=="Membership"]$color <-"#eb7df4" #%11% of all ties
+E(g1_groundwater)[E(g1_groundwater)$type=="Regulation/Oversight"]$color <-"#fb7e81" #6% of all ties
+E(g1_groundwater)[E(g1_groundwater)$type=="Advocacy/Policy Preference"]$color <-"#97c2fc" #40% of ENV ties
 E(g1_groundwater)[E(g1_groundwater)$type=="Authority to set rules"]$color <-"#ec008c"
 
 
@@ -729,11 +757,11 @@ ledges_gw <-
     ),
     arrows = c("to"),
     color = c(
-      "#004e24",
-      "black",
-      "#c77adb",
-      "#e81123",
-      "#00bcf2",
+      "#7be141",
+      "#f6eb14",
+      "#eb7df4",
+      "#fb7e81",
+      "#97c2fc",
       "#ec008c",
       "gray"
     )
@@ -741,13 +769,13 @@ ledges_gw <-
 
 
 
-V(g1_groundwater)[which(V(g1_groundwater)$type=="Government")]$color<-"#e81123"
-V(g1_groundwater)[which(V(g1_groundwater)$type=="NGO")]$color<-"#00188f"
-V(g1_groundwater)[which(V(g1_groundwater)$type=="Private")]$color<-"#004e24"
-V(g1_groundwater)[which(V(g1_groundwater)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_groundwater)[which(V(g1_groundwater)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_groundwater)[which(V(g1_groundwater)$type=="Academic")]$color<-"#00bcf2"
-V(g1_groundwater)[which(V(g1_groundwater)$type=="Public")]$color<- "#c77adb"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="Government")]$color<-"#fb7e81"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="NGO")]$color<-"#ad85e4"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="Private")]$color<-"#7be141"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="Utilities")]$color<-"#ffa807"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="Academic")]$color<-"#97c2fc"
+V(g1_groundwater)[which(V(g1_groundwater)$type=="Public")]$color<- "#eb7df4"
 
 
 V(g1_groundwater)[which(V(g1_groundwater)$level=="Local")]$shape<-"dot"
@@ -768,10 +796,10 @@ lnodes_gw <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#c77adb",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#eb7df4",
       "white",
       "white",
       "white"
@@ -796,8 +824,8 @@ lnodes_gw <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -842,9 +870,9 @@ V(g1_innovation)[i]$size<-input_attributes$TotalDegree[which(input_attributes$na
 
 
 
-E(g1_innovation)[E(g1_innovation)$type=="Money"]$color <-"#004e24" #18% of all ties
-E(g1_innovation)[E(g1_innovation)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_innovation)[E(g1_innovation)$type=="Water"]$color <-"#00bcf2" #8% of all ties
+E(g1_innovation)[E(g1_innovation)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_innovation)[E(g1_innovation)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_innovation)[E(g1_innovation)$type=="Water"]$color <-"#97c2fc" #8% of all ties
 
 
 
@@ -852,17 +880,17 @@ ledges_innovate <-
   data.frame(
     label = c("Money", "Information", "Water", "Other"),
     arrows = c("to"),
-    color = c("#004e24", "black", "00bcf2", "gray")
+    color = c("#7be141", "#f6eb14", "00bcf2", "gray")
   )
 
 
-V(g1_innovation)[which(V(g1_innovation)$type=="Government")]$color<-"#e81123"
-V(g1_innovation)[which(V(g1_innovation)$type=="NGO")]$color<-"#00188f"
-V(g1_innovation)[which(V(g1_innovation)$type=="Private")]$color<-"#004e24"
-V(g1_innovation)[which(V(g1_innovation)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_innovation)[which(V(g1_innovation)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_innovation)[which(V(g1_innovation)$type=="Academic")]$color<-"#00bcf2"
-V(g1_innovation)[which(V(g1_innovation)$type=="Public")]$color<- "#c77adb"
+V(g1_innovation)[which(V(g1_innovation)$type=="Government")]$color<-"#fb7e81"
+V(g1_innovation)[which(V(g1_innovation)$type=="NGO")]$color<-"#ad85e4"
+V(g1_innovation)[which(V(g1_innovation)$type=="Private")]$color<-"#7be141"
+V(g1_innovation)[which(V(g1_innovation)$type=="Utilities")]$color<-"#ffa807"
+V(g1_innovation)[which(V(g1_innovation)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_innovation)[which(V(g1_innovation)$type=="Academic")]$color<-"#97c2fc"
+V(g1_innovation)[which(V(g1_innovation)$type=="Public")]$color<- "#eb7df4"
 
 V(g1_innovation)[which(V(g1_innovation)$level=="Local")]$shape<-"dot"
 V(g1_innovation)[which(V(g1_innovation)$level=="Regional")]$shape<-"triangle"
@@ -883,11 +911,11 @@ lnodes_innovate <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#c77adb",
-      "#ff8C00",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#eb7df4",
+      "#ffa807",
       "white",
       "white",
       "white"
@@ -914,8 +942,8 @@ lnodes_innovate <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -960,9 +988,9 @@ V(g1_municipal)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1
 V(g1_municipal)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_municipal)[i]$name)]
 }
 
-E(g1_municipal)[E(g1_municipal)$type=="Money"]$color <-"#004e24" #18% of all ties
-E(g1_municipal)[E(g1_municipal)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_municipal)[E(g1_municipal)$type=="Water"]$color <-"#e81123" #8% of all ties
+E(g1_municipal)[E(g1_municipal)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_municipal)[E(g1_municipal)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_municipal)[E(g1_municipal)$type=="Water"]$color <-"#fb7e81" #8% of all ties
 E(g1_municipal)[E(g1_municipal)$type=="Regulation/Oversight"]$color <-"#ec008c" #6% of all ties
 E(g1_municipal)[E(g1_municipal)$type=="Advocacy/Policy Preference"]$color <-"00bcf2" #40% of ENV ties
 
@@ -978,17 +1006,17 @@ ledges_muni <-
       "Other"
     ),
     arrows = c("to"),
-    color = c("#004e24", "black", "#e81123", "#ec008c", "00bcf2", "gray")
+    color = c("#7be141", "#f6eb14", "#fb7e81", "#ec008c", "00bcf2", "gray")
   )
 
 
-V(g1_municipal)[which(V(g1_municipal)$type=="Government")]$color<-"#e81123"
-V(g1_municipal)[which(V(g1_municipal)$type=="NGO")]$color<-"#00188f"
-V(g1_municipal)[which(V(g1_municipal)$type=="Private")]$color<-"#004e24"
-V(g1_municipal)[which(V(g1_municipal)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_municipal)[which(V(g1_municipal)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_municipal)[which(V(g1_municipal)$type=="Academic")]$color<-"#00bcf2"
-V(g1_municipal)[which(V(g1_municipal)$type=="Public")]$color<- "#c77adb"
+V(g1_municipal)[which(V(g1_municipal)$type=="Government")]$color<-"#fb7e81"
+V(g1_municipal)[which(V(g1_municipal)$type=="NGO")]$color<-"#ad85e4"
+V(g1_municipal)[which(V(g1_municipal)$type=="Private")]$color<-"#7be141"
+V(g1_municipal)[which(V(g1_municipal)$type=="Utilities")]$color<-"#ffa807"
+V(g1_municipal)[which(V(g1_municipal)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_municipal)[which(V(g1_municipal)$type=="Academic")]$color<-"#97c2fc"
+V(g1_municipal)[which(V(g1_municipal)$type=="Public")]$color<- "#eb7df4"
 
 V(g1_municipal)[which(V(g1_municipal)$level=="Local")]$shape<-"dot"
 V(g1_municipal)[which(V(g1_municipal)$level=="Regional")]$shape<-"triangle"
@@ -1009,11 +1037,11 @@ lnodes_muni <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#c77adb",
-      "#ff8C00",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#eb7df4",
+      "#ffa807",
       "white",
       "white",
       "white"
@@ -1040,8 +1068,8 @@ lnodes_muni <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -1087,8 +1115,8 @@ V(g1_oilandgas)[i]$size<-input_attributes$TotalDegree[which(input_attributes$nam
 }
 
 
-E(g1_oilandgas)[E(g1_oilandgas)$type=="Information"]$color <-"black" #18% of all ties
-E(g1_oilandgas)[E(g1_oilandgas)$type=="Lobbying"]$color <-"#00188f" #10% of all ties
+E(g1_oilandgas)[E(g1_oilandgas)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_oilandgas)[E(g1_oilandgas)$type=="Lobbying"]$color <-"#ad85e4" #10% of all ties
 E(g1_oilandgas)[E(g1_oilandgas)$type=="Regulation/Oversight"]$color <-"#ec008c" #6% of all ties
 E(g1_oilandgas)[E(g1_oilandgas)$type=="Water sales"]$color <-"#00b294" #25% of ties in AG
 
@@ -1103,18 +1131,18 @@ ledges_og <-
       "Other"
     ),
     arrows = c("to"),
-    color = c("black", "#00188f", "#ec008c", "#00b294", "gray")
+    color = c("#f6eb14", "#ad85e4", "#ec008c", "#00b294", "gray")
   )
 
 
 
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Government")]$color<-"#e81123"
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="NGO")]$color<-"#00188f"
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Private")]$color<-"#004e24"
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Academic")]$color<-"#00bcf2"
-V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Public")]$color<- "#c77adb"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Government")]$color<-"#fb7e81"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="NGO")]$color<-"#ad85e4"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Private")]$color<-"#7be141"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Utilities")]$color<-"#ffa807"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Academic")]$color<-"#97c2fc"
+V(g1_oilandgas)[which(V(g1_oilandgas)$type=="Public")]$color<- "#eb7df4"
 
 V(g1_oilandgas)[which(V(g1_oilandgas)$level=="Local")]$shape<-"dot"
 V(g1_oilandgas)[which(V(g1_oilandgas)$level=="Regional")]$shape<-"triangle"
@@ -1135,11 +1163,11 @@ lnodes_og <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#c77adb",
-      "#ff8C00",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#eb7df4",
+      "#ffa807",
       "white",
       "white",
       "white"
@@ -1166,8 +1194,8 @@ lnodes_og <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
@@ -1212,10 +1240,10 @@ V(g1_rural)[i]$type<-input_attributes$type[which(input_attributes$name==V(g1_rur
 V(g1_rural)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V(g1_rural)[i]$name)]
 }
 
-E(g1_rural)[E(g1_rural)$type=="Money"]$color <-"#004e24" #18% of all ties
-E(g1_rural)[E(g1_rural)$type=="Information"]$color <-"orange" #18% of all ties
-E(g1_rural)[E(g1_rural)$type=="Membership"]$color <-"#c77adb" #%11% of all ties
-E(g1_rural)[E(g1_rural)$type=="Water"]$color <-"#00b294" #8% of all ties
+E(g1_rural)[E(g1_rural)$type=="Money"]$color <-"#7be141" #18% of all ties
+E(g1_rural)[E(g1_rural)$type=="Information"]$color <-"#f6eb14" #18% of all ties
+E(g1_rural)[E(g1_rural)$type=="Membership"]$color <-"#eb7df4" #%11% of all ties
+E(g1_rural)[E(g1_rural)$type=="Water"]$color <-"#97c2fc" #8% of all ties
 E(g1_rural)[E(g1_rural)$type=="Regulation/Oversight"]$color <-"#ec008c" #6% of all ties
 E(g1_rural)[E(g1_rural)$type=="Contract"]$color <-"#00b294" #13% of Rural ties
 
@@ -1232,24 +1260,24 @@ ledges_rural <-
     ),
     arrows = c("to"),
     color = c(
-      "#004e24",
-      "black",
-      "#c77adb",
+      "#7be141",
+      "#f6eb14",
+      "#eb7df4",
       "#ec008c",
       "#00b294",
-      "#00b294",
+      "#97c2fc",
       "gray"
     )
   )
 
 
-V(g1_rural)[which(V(g1_rural)$type=="Government")]$color<-"#e81123"
-V(g1_rural)[which(V(g1_rural)$type=="NGO")]$color<-"#00188f"
-V(g1_rural)[which(V(g1_rural)$type=="Private")]$color<-"#004e24"
-V(g1_rural)[which(V(g1_rural)$type=="Utilities")]$color<-"#ff8C00"
-V(g1_rural)[which(V(g1_rural)$type=="Physical Feature")]$color<-"#ff8C00"
-V(g1_rural)[which(V(g1_rural)$type=="Academic")]$color<-"#00bcf2"
-V(g1_rural)[which(V(g1_rural)$type=="Public")]$color<- "#c77adb"
+V(g1_rural)[which(V(g1_rural)$type=="Government")]$color<-"#fb7e81"
+V(g1_rural)[which(V(g1_rural)$type=="NGO")]$color<-"#ad85e4"
+V(g1_rural)[which(V(g1_rural)$type=="Private")]$color<-"#7be141"
+V(g1_rural)[which(V(g1_rural)$type=="Utilities")]$color<-"#ffa807"
+V(g1_rural)[which(V(g1_rural)$type=="Physical Feature")]$color<-"#ffa807"
+V(g1_rural)[which(V(g1_rural)$type=="Academic")]$color<-"#97c2fc"
+V(g1_rural)[which(V(g1_rural)$type=="Public")]$color<- "#eb7df4"
 
 
 V(g1_rural)[which(V(g1_rural)$level=="Local")]$shape<-"dot"
@@ -1271,11 +1299,11 @@ lnodes_rural <-
       "Statewide"
     ),
     color.background = c(
-      "#e81123",
-      "#00188f",
-      "#004e24",
-      "#c77adb",
-      "#ff8C00",
+      "#fb7e81",
+      "#ad85e4",
+      "#7be141",
+      "#eb7df4",
+      "#ffa807",
       "white",
       "white",
       "white"
@@ -1302,8 +1330,8 @@ lnodes_rural <-
     ),
     font.color =c(
       "black",
-      "white",
-      "white",
+      "black",
+      "black",
       "black",
       "black",
       "black",
