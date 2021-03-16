@@ -1,12 +1,17 @@
 ---
-title: 'Texas Water Governance System Mapping '
-author: "Patrick Bixler"
-date: "01/13/2021"
+title: 'Texas Water Governance System Mapping - Version 2'
+author: "Patrick Bixler, Regina Buono, Ethan Tennison"
+date: "02/19/2021"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 
 ```{r include=FALSE}
 source("utils1.R")
@@ -120,13 +125,13 @@ colnames(DF_Centrality)[1]<-"name"
 colnames(DF_Centrality)[4]<-"TotalDegree"
 
 
-# par(mfcol = c(4,3)) 
-# hist(inDegree)
-# hist(outDegree)
-# hist(TotalDegree)
-# hist(betweenness)
-# hist(inCloseness)
-# hist(outCloseness)
+ par(mfcol = c(3,3)) 
+ hist(inDegree)
+ hist(outDegree)
+ hist(TotalDegree)
+ hist(betweenness)
+ hist(inCloseness)
+ hist(outCloseness)
 
 dd.g1<-degree.distribution(g1)
 d<-1:max(TotalDegree)-1

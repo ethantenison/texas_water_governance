@@ -35,7 +35,7 @@ edge_colors <-
       "#fb7e81",# "Advocacy/Policy Preference",
       "#ffa807",#   "Information",
       "red",#   "Authority to set rules",
-      "black",#   "Contract",
+      "yellow",#   "Contract",
       "#eb7df4",#   "Cooperation/coordination",
       "#97c2fc",#   "Water",                      
       "#006200",#   "Regulation/Oversight",
@@ -190,6 +190,7 @@ names(edge_colors) <- c(
 
 
 edge_color_order = c(
+  "Contract",
   "Information",
   "Advocacy/Policy Preference",
   "Authority to set rules",
@@ -200,7 +201,6 @@ edge_color_order = c(
   "Water sales",
   "Regulation/Oversight",
   "Money",
-  "Contract",
   "Other"
 )
 
@@ -228,13 +228,13 @@ colnames(DF_Centrality)[1]<-"name"
 colnames(DF_Centrality)[4]<-"TotalDegree"
 
 
-# par(mfcol = c(4,3)) 
-# hist(inDegree)
-# hist(outDegree)
-# hist(TotalDegree)
-# hist(betweenness)
-# hist(inCloseness)
-# hist(outCloseness)
+ par(mfcol = c(4,3)) 
+ hist(inDegree)
+ hist(outDegree)
+ hist(TotalDegree)
+ hist(betweenness)
+ hist(inCloseness)
+ hist(outCloseness)
 
 dd.g1<-degree.distribution(g1)
 d<-1:max(TotalDegree)-1
@@ -287,8 +287,8 @@ g <- ggraph(graph, layout = 'stress') +
   geom_node_text(
      aes(
        x = x,
-       y = y - .2,
-       size = 500,
+       y = y + .2,
+       size = 750,
        label = ifelse(
          size > 100, 
          label, 
@@ -340,8 +340,8 @@ g <- ggraph(graph, layout = 'stress') +
   )) +
   geom_node_text(aes(
     x = x,
-    y = y - .2,
-    size = 500,
+    y = y + .2,
+    size = 250,
     label = ifelse(size > 100,
                    label,
                    "")
@@ -403,7 +403,7 @@ V(g1_agriculture)[which(V(g1_agriculture)$level=="Statewide")]$shape<-"square"
 
 g <- ggraph(g1_agriculture, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -415,10 +415,10 @@ g <- ggraph(g1_agriculture, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
   labs(title = 'Agriculture') +
@@ -474,7 +474,7 @@ V(g1_environment)[which(V(g1_environment)$level=="Statewide")]$shape<-"square"
 
 g <- ggraph(g1_environment, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -486,10 +486,10 @@ g <- ggraph(g1_environment, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(18,16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
@@ -539,7 +539,7 @@ V(g1_flooding)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name
 
 g <- ggraph(g1_flooding, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -551,10 +551,10 @@ g <- ggraph(g1_flooding, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
@@ -604,7 +604,7 @@ V(g1_groundwater)[i]$size<-input_attributes$TotalDegree[which(input_attributes$n
 
 g <- ggraph(g1_groundwater, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -616,10 +616,10 @@ g <- ggraph(g1_groundwater, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
@@ -669,7 +669,7 @@ V(g1_innovation)[i]$size<-input_attributes$TotalDegree[which(input_attributes$na
 
 g <- ggraph(g1_innovation, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -681,10 +681,10 @@ g <- ggraph(g1_innovation, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(18,16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
@@ -736,7 +736,7 @@ V(g1_municipal)[i]$size<-input_attributes$TotalDegree[which(input_attributes$nam
 
 g <- ggraph(g1_municipal, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -748,10 +748,10 @@ g <- ggraph(g1_municipal, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
@@ -801,7 +801,7 @@ V(g1_oilandgas)[i]$size<-input_attributes$TotalDegree[which(input_attributes$nam
 
 g <- ggraph(g1_oilandgas, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -813,10 +813,10 @@ g <- ggraph(g1_oilandgas, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
@@ -867,7 +867,7 @@ V(g1_rural)[i]$size<-input_attributes$TotalDegree[which(input_attributes$name==V
 
 g <- ggraph(g1_rural, layout = 'fr') +
   geom_edge_link(
-    aes(edge_color = node1.type),
+    aes(edge_color = "#049E8E"),
     edge_width = 1,
     edge_alpha = 0.6,
     arrow = arrow(length = unit(4, 'mm')),
@@ -879,10 +879,10 @@ g <- ggraph(g1_rural, layout = 'fr') +
     shape = level
   )) +
   geom_node_text(aes(x = x,
-                     y = y - .1,
+                     y = y - .2,
                      label = label)) +
   scale_color_manual(name = "Type of Organization", values = node_colors) +
-  scale_edge_color_manual(name = "Type of Connection", values = node_colors) +
+  scale_edge_color_manual(values = "#049E8E") +
   scale_shape_manual(values=c(18,16,17,15))+
   scale_size_area(max_size = 10) +
   theme_graph(title_size = 34) +
